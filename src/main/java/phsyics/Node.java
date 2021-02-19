@@ -34,6 +34,8 @@ public class Node {
 		pos.add(velocity);
 		if (pos.y > 1000) {
 			pos.y = 1000;
+			velocity.y = 0;
+			applyForce(ClothContainer.GRAVITY.copy().scale(-1));
 		}
 	}
 

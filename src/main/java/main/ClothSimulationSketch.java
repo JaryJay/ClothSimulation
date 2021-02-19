@@ -23,7 +23,7 @@ public class ClothSimulationSketch extends PApplet {
 
 	@Override
 	public void draw() {
-		background(255);
+		background(43, 47, 48);
 		clothContainer.update();
 		if (followMouse)
 			clothContainer.suckToPoint(mouseX, mouseY);

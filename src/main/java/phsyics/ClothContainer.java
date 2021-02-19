@@ -7,26 +7,28 @@ import processing.core.PApplet;
 
 public class ClothContainer {
 
+	public static final Vector2f GRAVITY = new Vector2f(0, 0.2f);
+
 	List<Node> nodes = new ArrayList<>();
 	List<Constraint> constraints = new ArrayList<>();
-	Node[][] grid;
 
 	public ClothContainer() {
-		int numOfRows = 20;
-		int numOfColumns = 50;
-		grid = new Node[numOfRows][numOfColumns];
-		addGrid(numOfRows, numOfColumns, Constraint.TARGET_LENGTH);
-		for (int i = 0; i < numOfColumns; i++) {
-			grid[0][i].setFixed(true);
-		}
+		addGrid(20, 45, 150, 200);
+		addGrid(19, 41, 350, 300);
+		addGrid(18, 37, 550, 400);
+		addGrid(17, 33, 750, 500);
 	}
 
-	public void addGrid(int numOfRows, int numOfColumns, float spacing) {
+	public void addGrid(int numOfRows, int numOfColumns, int x, int y) {
+		Node[][] grid = new Node[numOfRows][numOfColumns];
 		for (int i = 0; i < numOfRows; i++) {
 			for (int j = 0; j < numOfColumns; j++) {
-				Node node = new Node(j * spacing + 500, i * spacing + 200);
+				Node node = new Node(j * Constraint.TARGET_LENGTH + x, i * Constraint.TARGET_LENGTH + y);
 				grid[i][j] = node;
 				nodes.add(node);
+				if (i == 0) {
+					node.setFixed(true);
+				}
 			}
 		}
 		for (int i = 0; i < numOfRows; i++) {
@@ -46,9 +48,10 @@ public class ClothContainer {
 			Constraint c = constraints.get(i);
 			c.update();
 		}
-		Vector2f gravity = new Vector2f(0, 0.2f);
 		for (Node n : nodes) {
-			n.applyForce(gravity);
+			Vector2f wind = new Vector2f((float) ((Math.random() - 0.3F) * 0.05F), 0);
+			n.applyForce(GRAVITY);
+			n.applyForce(wind);
 			n.applyVelocity();
 			n.shrinkVelocity();
 		}
@@ -60,7 +63,7 @@ public class ClothContainer {
 	}
 
 	private void displayConstraints(PApplet p) {
-		p.fill(0);
+		p.stroke(255);
 		for (int i = 0; i < constraints.size(); i++) {
 			Constraint c = constraints.get(i);
 			Vector2f n1Pos = c.getN1().getPos();
@@ -72,7 +75,9 @@ public class ClothContainer {
 	public void suckToPoint(int mouseX, int mouseY) {
 		Vector2f center = new Vector2f(mouseX, mouseY);
 		for (Node n : nodes) {
-			n.applyForce(center.copy().subtract(n.getPos()).normalize().scale(1));
+			Vector2f nToCenter = center.copy().subtract(n.getPos());
+//			float lengthSquared = nToCenter.lengthSquared() + 0.001F;
+			n.applyForce(nToCenter.normalize().scale(0.7F));
 		}
 	}
 
