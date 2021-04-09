@@ -6,3 +6,4 @@ A simulation of cloth made in Java using Processing libraries. Click to accelera
 ![Alt text](res/screenshots/4.png?raw=true "Screenshot 4")
 ![Alt text](res/screenshots/5.png?raw=true "Screenshot 5")
 ![Alt text](res/screenshots/6.png?raw=true "Screenshot 6")
+Note: Screenshots do not show the cursor for some reason
